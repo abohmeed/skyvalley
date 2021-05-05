@@ -1,4 +1,4 @@
-module github.com/abohmeed/skyvalley
+module github.com/abohmeed/skyvalley/auth
 
 go 1.16
 
