@@ -9,6 +9,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis"
 )
 
 type User struct {
@@ -30,6 +31,22 @@ type AccessDetails struct {
 	UserId     uint64
 }
 
+var Client *redis.Client
+
+func init() {
+	//Initializing redis
+	dsn := os.Getenv("REDIS_DSN")
+	if len(dsn) == 0 {
+		dsn = "localhost:6379"
+	}
+	Client = redis.NewClient(&redis.Options{
+		Addr: dsn, //redis port
+	})
+	_, err := Client.Ping().Result()
+	if err != nil {
+		panic(err)
+	}
+}
 func TokenValid(r *http.Request) error {
 	token, err := VerifyToken(r)
 	if err != nil {
@@ -71,7 +88,7 @@ func ExtractToken(r *http.Request) string {
 	return ""
 }
 func FetchAuth(authD *AccessDetails) (uint64, error) {
-	userid, err := client.Get(authD.AccessUuid).Result()
+	userid, err := Client.Get(authD.AccessUuid).Result()
 	if err != nil {
 		return 0, err
 	}
