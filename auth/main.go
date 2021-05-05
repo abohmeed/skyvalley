@@ -10,8 +10,8 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis/v7"
 	"github.com/twinj/uuid"
+	"github.com/abohmeed/skyvalley/authcommon"
 )
 
 var (
@@ -31,7 +31,6 @@ func main() {
 	router.POST("/logout", Logout)
 	log.Fatal(router.Run(":8080"))
 }
-
 
 func Login(c *gin.Context) {
 	var u User
