@@ -38,7 +38,7 @@ app.post("/login", (req, res) => {
             res.json({ token })
         });
     } else {
-        res.status(403).send('forbidden >_<')
+        res.status(403).json({"error":"Invalid username or password"})
     }
 });
 // function extractToken(req, res, next) {
