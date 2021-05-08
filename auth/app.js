@@ -28,5 +28,8 @@ app.post("/logout", (req, res) => {
     })
     res.json({ "message": "You have been logged out successfully" })
 })
-
+app.use(db.deserialize)
+app.post("/delete", (req, res) => {
+    db.delete(req, res)
+})
 app.listen(3000, () => console.log("Server started"));
