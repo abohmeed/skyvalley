@@ -5,11 +5,16 @@ import (
 	"os"
 
 	"github.com/go-redis/redis"
+	"github.com/joho/godotenv"
 )
 
 var client *redis.Client
 
 func init() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	//Initializing redis
 	dsn := os.Getenv("REDIS_HOST") + ":" + os.Getenv("REDIS_PORT")
 	if len(dsn) == 1 {
@@ -18,8 +23,7 @@ func init() {
 	client = redis.NewClient(&redis.Options{
 		Addr: dsn, //redis port
 	})
-	_, err := client.Ping().Result()
-	if err != nil {
+	if _, err = client.Ping().Result(); err != nil {
 		log.Fatal("Could not connect to Redis... Exiting.")
 		panic(err)
 	}
